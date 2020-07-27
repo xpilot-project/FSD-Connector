@@ -1,0 +1,108 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{0375FCFE-1E78-43DA-9865-BDE0F1412598}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Vatsim.Fsd.Connector</RootNamespace>
+    <AssemblyName>Vatsim.Fsd.Connector</AssemblyName>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <Deterministic>true</Deterministic>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.12.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="ClientProperties.cs" />
+    <Compile Include="DataReceivedEventArgs.cs" />
+    <Compile Include="Enums.cs" />
+    <Compile Include="FSDSession.cs" />
+    <Compile Include="NetworkErrorEventArgs.cs" />
+    <Compile Include="NetworkEventArgs.cs" />
+    <Compile Include="NetworkInfo.cs" />
+    <Compile Include="NetworkServerInfo.cs" />
+    <Compile Include="PDU\PDUAddATC.cs" />
+    <Compile Include="PDU\PDUAddPilot.cs" />
+    <Compile Include="PDU\PDUATCMessage.cs" />
+    <Compile Include="PDU\PDUATCPosition.cs" />
+    <Compile Include="PDU\PDUAuthChallenge.cs" />
+    <Compile Include="PDU\PDUAuthResponse.cs" />
+    <Compile Include="PDU\PDUBase.cs" />
+    <Compile Include="PDU\PDUBroadcastMessage.cs" />
+    <Compile Include="PDU\PDUClientIdentification.cs" />
+    <Compile Include="PDU\PDUClientQuery.cs" />
+    <Compile Include="PDU\PDUClientQueryResponse.cs" />
+    <Compile Include="PDU\PDUCloudData.cs" />
+    <Compile Include="PDU\PDUDeleteATC.cs" />
+    <Compile Include="PDU\PDUDeletePilot.cs" />
+    <Compile Include="PDU\PDUFlightPlan.cs" />
+    <Compile Include="PDU\PDUFlightPlanAmendment.cs" />
+    <Compile Include="PDU\PDUFlightStrip.cs" />
+    <Compile Include="PDU\PDUFormatException.cs" />
+    <Compile Include="PDU\PDUHandoff.cs" />
+    <Compile Include="PDU\PDUHandoffAccept.cs" />
+    <Compile Include="PDU\PDUHandoffCancelled.cs" />
+    <Compile Include="PDU\PDUIHaveTarget.cs" />
+    <Compile Include="PDU\PDUKillRequest.cs" />
+    <Compile Include="PDU\PDULandLineCommand.cs" />
+    <Compile Include="PDU\PDULegacyPlaneInfoResponse.cs" />
+    <Compile Include="PDU\PDUMetarRequest.cs" />
+    <Compile Include="PDU\PDUMetarResponse.cs" />
+    <Compile Include="PDU\PDUModernClientCheck.cs" />
+    <Compile Include="PDU\PDUPilotPosition.cs" />
+    <Compile Include="PDU\PDUPing.cs" />
+    <Compile Include="PDU\PDUPlaneInfoRequest.cs" />
+    <Compile Include="PDU\PDUPlaneInfoResponse.cs" />
+    <Compile Include="PDU\PDUPointout.cs" />
+    <Compile Include="PDU\PDUPong.cs" />
+    <Compile Include="PDU\PDUProtocolError.cs" />
+    <Compile Include="PDU\PDUPushToDepartureList.cs" />
+    <Compile Include="PDU\PDURadioMessage.cs" />
+    <Compile Include="PDU\PDUSecondaryVisCenter.cs" />
+    <Compile Include="PDU\PDUServerIdentification.cs" />
+    <Compile Include="PDU\PDUSharedState.cs" />
+    <Compile Include="PDU\PDUTemperatureData.cs" />
+    <Compile Include="PDU\PDUTextMessage.cs" />
+    <Compile Include="PDU\PDUVersionRequest.cs" />
+    <Compile Include="PDU\PDUWallop.cs" />
+    <Compile Include="PDU\PDUWeatherProfileRequest.cs" />
+    <Compile Include="PDU\PDUWindData.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RawDataEventArgs.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>
