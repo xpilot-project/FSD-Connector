@@ -5,16 +5,16 @@ namespace Vatsim.Fsd.Connector
 	public class ClientProperties
 	{
 		public string Name { get; set; }
-		public string ClientPath { get; set; }
-		public string PluginPath { get; set; }
+		public string ClientHash { get; set; }
+		public string PluginHash { get; set; }
 		public Version Version { get; set; }
 
-		public ClientProperties(string name, Version ver, string clientPath, string pluginPath)
+		public ClientProperties(string name, Version ver, string client, string plugin)
 		{
 			Name = name;
 			Version = ver;
-			ClientPath = clientPath;
-			PluginPath = pluginPath;
+			ClientHash = client;
+			PluginHash = plugin;
 		}
 
 		public override string ToString()

@@ -1139,7 +1139,7 @@ namespace Vatsim.Fsd.Connector
 				if ((pdu is PDUClientIdentification) && string.IsNullOrEmpty((pdu as PDUClientIdentification).InitialChallenge))
 				{
 					string initialChallenge = Marshal.PtrToStringAnsi(GenerateAuthChallenge());
-					mServerAuthSessionKey = Marshal.PtrToStringAnsi(GenerateAuthResponse(initialChallenge, null, ClientProperties.ClientPath, ClientProperties.PluginPath));
+					mServerAuthSessionKey = Marshal.PtrToStringAnsi(GenerateAuthResponse(initialChallenge, null, ClientProperties.ClientHash, ClientProperties.PluginHash));
 					(pdu as PDUClientIdentification).InitialChallenge = initialChallenge;
 				}
 				if (
@@ -1192,7 +1192,7 @@ namespace Vatsim.Fsd.Connector
 			{
 				return;
 			}
-			string expectedResponse = Marshal.PtrToStringAnsi(GenerateAuthResponse(mLastServerAuthChallenge, mServerAuthChallengeKey, ClientProperties.ClientPath, ClientProperties.PluginPath));
+			string expectedResponse = Marshal.PtrToStringAnsi(GenerateAuthResponse(mLastServerAuthChallenge, mServerAuthChallengeKey, ClientProperties.ClientHash, ClientProperties.PluginHash));
 			if (response != expectedResponse)
 			{
 				RaiseNetworkError("The server has failed to respond correctly to the authentication challenge.");
@@ -1360,7 +1360,7 @@ namespace Vatsim.Fsd.Connector
 										PDUServerIdentification pdu = PDUServerIdentification.Parse(fields);
 										if (GetClientKey() != 0)
 										{
-											mClientAuthSessionKey = Marshal.PtrToStringAnsi(GenerateAuthResponse(pdu.InitialChallengeKey, null, ClientProperties.ClientPath, ClientProperties.PluginPath));
+											mClientAuthSessionKey = Marshal.PtrToStringAnsi(GenerateAuthResponse(pdu.InitialChallengeKey, null, ClientProperties.ClientHash, ClientProperties.PluginHash));
 											mClientAuthChallengeKey = mClientAuthSessionKey;
 										}
 										RaiseServerIdentificationReceived(pdu);
@@ -1560,7 +1560,7 @@ namespace Vatsim.Fsd.Connector
 									if (GetClientKey() != 0)
 									{
 										PDUAuthChallenge pdu = PDUAuthChallenge.Parse(fields);
-										string response = Marshal.PtrToStringAnsi(GenerateAuthResponse(pdu.Challenge, mClientAuthChallengeKey, ClientProperties.ClientPath, ClientProperties.PluginPath));
+										string response = Marshal.PtrToStringAnsi(GenerateAuthResponse(pdu.Challenge, mClientAuthChallengeKey, ClientProperties.ClientHash, ClientProperties.PluginHash));
 										mClientAuthChallengeKey = GenerateMD5Digest(mClientAuthSessionKey + response);
 										PDUAuthResponse responsePDU = new PDUAuthResponse(pdu.To, pdu.From, response);
 										SendPDU(responsePDU);
