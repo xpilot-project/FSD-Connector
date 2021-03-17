@@ -16,10 +16,10 @@ namespace Vatsim.FsdClient
 		[DllImport("vatsimauth", CharSet = CharSet.Ansi, CallingConvention = CallingConvention.Cdecl)]
 		public static extern IntPtr GenerateAuthResponse(string challengeKey, string key, string clientHash, string pluginHash);
 
-		[DllImport("Vatsim.Fsd.ClientAuth.dll", CharSet = CharSet.Ansi, CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("vatsimauth", CharSet = CharSet.Ansi, CallingConvention = CallingConvention.Cdecl)]
 		public static extern IntPtr GenerateAuthChallenge();
 
-		[DllImport("Vatsim.Fsd.ClientAuth.dll", CharSet = CharSet.Ansi, CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("vatsimauth", CharSet = CharSet.Ansi, CallingConvention = CallingConvention.Cdecl)]
 		public static extern ushort ClientPublicKey();
 
 		public ushort GetClientKey()
