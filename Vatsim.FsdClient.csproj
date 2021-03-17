@@ -7,8 +7,8 @@
     <ProjectGuid>{0375FCFE-1E78-43DA-9865-BDE0F1412598}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Vatsim.Fsd.Connector</RootNamespace>
-    <AssemblyName>Vatsim.Fsd.Connector</AssemblyName>
+    <RootNamespace>Vatsim.FsdClient</RootNamespace>
+    <AssemblyName>Vatsim.FsdClient</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
@@ -108,6 +108,7 @@
     <Compile Include="PDU\PDUCloudData.cs" />
     <Compile Include="PDU\PDUDeleteATC.cs" />
     <Compile Include="PDU\PDUDeletePilot.cs" />
+    <Compile Include="PDU\PDUFastPilotPosition.cs" />
     <Compile Include="PDU\PDUFlightPlan.cs" />
     <Compile Include="PDU\PDUFlightPlanAmendment.cs" />
     <Compile Include="PDU\PDUFlightStrip.cs" />

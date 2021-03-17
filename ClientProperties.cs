@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Vatsim.Fsd.Connector
+namespace Vatsim.FsdClient
 {
 	public class ClientProperties
 	{
@@ -8,13 +8,15 @@ namespace Vatsim.Fsd.Connector
 		public string ClientHash { get; set; }
 		public string PluginHash { get; set; }
 		public Version Version { get; set; }
+		public string ClientHash { get; set; }
+		public string PluginHash { get; set; }
 
-		public ClientProperties(string name, Version ver, string client, string plugin)
+		public ClientProperties(string name, Version ver, string clientHash, string pluginHash)
 		{
 			Name = name;
 			Version = ver;
-			ClientHash = client;
-			PluginHash = plugin;
+			ClientHash = clientHash;
+			PluginHash = pluginHash;
 		}
 
 		public override string ToString()

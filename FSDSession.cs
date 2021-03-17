@@ -7,14 +7,14 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
-using Vatsim.Fsd.Connector.PDU;
+using Vatsim.FsdClient.PDU;
 
-namespace Vatsim.Fsd.Connector
+namespace Vatsim.FsdClient
 {
 	public class FSDSession
 	{
-		[DllImport("Vatsim.Fsd.ClientAuth.dll", CharSet = CharSet.Ansi, CallingConvention = CallingConvention.Cdecl)]
-		public static extern IntPtr GenerateAuthResponse(string challengeKey, string key, string clientPath, string pluginPath);
+		[DllImport("vatsimauth", CharSet = CharSet.Ansi, CallingConvention = CallingConvention.Cdecl)]
+		public static extern IntPtr GenerateAuthResponse(string challengeKey, string key, string clientHash, string pluginHash);
 
 		[DllImport("Vatsim.Fsd.ClientAuth.dll", CharSet = CharSet.Ansi, CallingConvention = CallingConvention.Cdecl)]
 		public static extern IntPtr GenerateAuthChallenge();
@@ -36,6 +36,7 @@ namespace Vatsim.Fsd.Connector
 		public event EventHandler<NetworkErrorEventArgs> NetworkError;
 		public event EventHandler<DataReceivedEventArgs<PDUATCPosition>> ATCPositionReceived;
 		public event EventHandler<DataReceivedEventArgs<PDUPilotPosition>> PilotPositionReceived;
+		public event EventHandler<DataReceivedEventArgs<PDUFastPilotPosition>> FastPilotPositionReceived;
 		public event EventHandler<DataReceivedEventArgs<PDUSecondaryVisCenter>> SecondaryVisCenterReceived;
 		public event EventHandler<DataReceivedEventArgs<PDUClientIdentification>> ClientIdentificationReceived;
 		public event EventHandler<DataReceivedEventArgs<PDUServerIdentification>> ServerIdentificationReceived;
@@ -266,6 +267,25 @@ namespace Vatsim.Fsd.Connector
 				{
 					PilotPositionReceived(this, new DataReceivedEventArgs<PDUPilotPosition>(pdu, mUserData));
 				}
+			}
+		}
+
+		private void RaiseFastPilotPositionReceived(PDUFastPilotPosition pdu)
+		{
+			if (this.FastPilotPositionReceived == null)
+			{
+				return;
+			}
+			if (mSyncContext != null)
+			{
+				mSyncContext.Post(delegate
+				{
+					this.FastPilotPositionReceived(this, new DataReceivedEventArgs<PDUFastPilotPosition>(pdu, mUserData));
+				}, null);
+			}
+			else
+			{
+				this.FastPilotPositionReceived(this, new DataReceivedEventArgs<PDUFastPilotPosition>(pdu, mUserData));
 			}
 		}
 
@@ -1273,7 +1293,7 @@ namespace Vatsim.Fsd.Connector
 					return;
 				}
 				char[] chars = new char[bytesReceived + 1];
-				Decoder d = Encoding.Default.GetDecoder();
+				Decoder d = Encoding.GetEncoding("ISO-8859-1").GetDecoder();
 				int charLen = d.GetChars(theSockId.mDataBuffer, 0, bytesReceived, chars, 0);
 				String data = new String(chars);
 				ProcessData(data);
@@ -1336,6 +1356,10 @@ namespace Vatsim.Fsd.Connector
 						case '@':
 							fields[0] = fields[0].Substring(1);
 							RaisePilotPositionReceived(PDUPilotPosition.Parse(fields));
+							break;
+						case '^':
+							fields[0] = fields[0].Substring(1);
+							RaiseFastPilotPositionReceived(PDUFastPilotPosition.Parse(fields));
 							break;
 						case '%':
 							fields[0] = fields[0].Substring(1);

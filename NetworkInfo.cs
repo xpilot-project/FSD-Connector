@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Net;
 
-namespace Vatsim.Fsd.Connector
+namespace Vatsim.FsdClient
 {
 	public class NetworkInfo
 	{

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Vatsim.Fsd.Connector.PDU
+namespace Vatsim.FsdClient.PDU
 {
 	public class PDUClientQueryResponse : PDUBase
 	{

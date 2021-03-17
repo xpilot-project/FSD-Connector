@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Vatsim.Fsd.Connector
+namespace Vatsim.FsdClient
 {
 	[Serializable]
 	public enum ProtocolRevision

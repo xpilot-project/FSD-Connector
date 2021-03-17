@@ -1,4 +1,4 @@
-﻿namespace Vatsim.Fsd.Connector.PDU
+﻿namespace Vatsim.FsdClient.PDU
 {
 	public abstract class PDUBase
 	{
