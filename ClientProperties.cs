@@ -8,8 +8,6 @@ namespace Vatsim.FsdClient
 		public string ClientHash { get; set; }
 		public string PluginHash { get; set; }
 		public Version Version { get; set; }
-		public string ClientHash { get; set; }
-		public string PluginHash { get; set; }
 
 		public ClientProperties(string name, Version ver, string clientHash, string pluginHash)
 		{
