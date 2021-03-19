@@ -21,11 +21,11 @@ namespace Vatsim.FsdClient.PDU
 		public int TrueAltitude { get; set; }
 		public int PressureAltitude { get; set; }
 		public int GroundSpeed { get; set; }
-		public int Pitch { get; set; }
-		public int Bank { get; set; }
-		public int Heading { get; set; }
+		public double Pitch { get; set; }
+		public double Heading { get; set; }
+		public double Bank { get; set; }
 
-		public PDUPilotPosition(string from, int txCode, bool squawkingModeC, bool identing, NetworkRating rating, double lat, double lon, int trueAlt, int pressureAlt, int gs, int pitch, int bank, int heading)
+		public PDUPilotPosition(string from, int txCode, bool squawkingModeC, bool identing, NetworkRating rating, double lat, double lon, int trueAlt, int pressureAlt, int gs, double pitch, double heading, double bank)
 			: base(from, "")
 		{
 			if (Double.IsNaN(lat)) throw new ArgumentException("Latitude must be a valid double precision number.", "lat");
@@ -40,25 +40,12 @@ namespace Vatsim.FsdClient.PDU
 			PressureAltitude = pressureAlt;
 			GroundSpeed = gs;
 			Pitch = pitch;
-			Bank = bank;
 			Heading = heading;
+			Bank = bank;
 		}
 
 		public override string Serialize()
 		{
-			// Convert PBH values into MSFS format.
-			double p = (double)Pitch / -360.0;
-			if (p < 0) p += 1.0;
-			p *= 1024.0;
-			double b = (double)Bank / -360.0;
-			if (b < 0) b += 1.0;
-			b *= 1024.0;
-			double h = (double)Heading / 360.0 * 1024.0;
-
-			// Shift the values into a 32 bit integer.
-			uint pbh = ((uint)p << 22) | ((uint)b << 12) | ((uint)h << 2);
-
-			// Assemble the PDU.
 			StringBuilder msg = new StringBuilder("@");
 			msg.Append(IsIdenting ? "Y" : (mIsSquawkingModeC ? "N" : "S"));
 			msg.Append(DELIMITER);
@@ -76,7 +63,7 @@ namespace Vatsim.FsdClient.PDU
 			msg.Append(DELIMITER);
 			msg.Append(GroundSpeed);
 			msg.Append(DELIMITER);
-			msg.Append(pbh);
+			msg.Append(PackPitchBankHeading(Pitch, Bank, Heading));
 			msg.Append(DELIMITER);
 			msg.Append(PressureAltitude - TrueAltitude);
 			return msg.ToString();
@@ -86,28 +73,6 @@ namespace Vatsim.FsdClient.PDU
 		{
 			if (fields.Length < 10) throw new PDUFormatException("Invalid field count.", Reassemble(fields));
 			try {
-				uint pbh = uint.Parse(fields[8]);
-				uint pitch = pbh >> 22;
-				uint bank = (pbh >> 12) & 0x3FF;
-				uint hdg = (pbh >> 2) & 0x3FF;
-				double pitchDbl = (double)pitch / 1024.0 * -360.0;
-				double bankDbl = (double)bank / 1024.0 * -360.0;
-				double hdgDbl = (double)hdg / 1024.0 * 360.0;
-				if (pitchDbl > 180.0) {
-					pitchDbl -= 360.0;
-				} else if (pitchDbl <= -180.0) {
-					pitchDbl += 360.0;
-				}
-				if (bankDbl > 180.0) {
-					bankDbl -= 360.0;
-				} else if (bankDbl <= -180.0) {
-					bankDbl += 360.0;
-				}
-				if (hdgDbl < 0.0) {
-					hdgDbl += 360.0;
-				} else if (hdgDbl >= 360.0) {
-					hdgDbl -= 360.0;
-				}
 				bool identing = false;
 				bool charlie = false;
 				switch (fields[0].ToUpper()) {
@@ -121,6 +86,7 @@ namespace Vatsim.FsdClient.PDU
 						identing = true;
 						break;
 				}
+				UnpackPitchBankHeading(uint.Parse(fields[8]), out double pitch, out double bank, out double heading);
 				return new PDUPilotPosition(
 					fields[1],
 					int.Parse(fields[2]),
@@ -132,9 +98,9 @@ namespace Vatsim.FsdClient.PDU
 					Convert.ToInt32(double.Parse(fields[6], CultureInfo.InvariantCulture)),
 					Convert.ToInt32(double.Parse(fields[6], CultureInfo.InvariantCulture) + double.Parse(fields[9], CultureInfo.InvariantCulture)),
 					Convert.ToInt32(double.Parse(fields[7], CultureInfo.InvariantCulture)),
-					Convert.ToInt32(pitchDbl),
-					Convert.ToInt32(bankDbl),
-					Convert.ToInt32(hdgDbl)
+					pitch,
+					heading,
+					bank
 				);
 			}
 			catch (Exception ex) {
