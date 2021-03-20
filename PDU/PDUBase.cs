@@ -28,14 +28,14 @@
 
 		protected static uint PackPitchBankHeading(double pitch, double bank, double heading)
 		{
-			double p = pitch / 360.0;
+			double p = pitch / -360.0;
 			if (p < 0)
 			{
 				p += 1.0;
 			}
 			p *= 1024.0;
 
-			double b = bank / 360.0;
+			double b = bank / -360.0;
 			if (b < 0)
 			{
 				b += 1.0;
@@ -50,7 +50,7 @@
 		protected static void UnpackPitchBankHeading(uint pbh, out double pitch, out double bank, out double heading)
 		{
 			uint pitchInt = pbh >> 22;
-			pitch = pitchInt / 1024.0 * 360.0;
+			pitch = pitchInt / 1024.0 * -360.0;
 			if (pitch > 180.0)
 			{
 				pitch -= 360.0;
@@ -61,7 +61,7 @@
 			}
 
 			uint bankInt = (pbh >> 12) & 0x3FF;
-			bank = bankInt / 1024.0 * 360.0;
+			bank = bankInt / 1024.0 * -360.0;
 			if (bank > 180.0)
 			{
 				bank -= 360.0;
